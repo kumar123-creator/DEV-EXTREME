@@ -197,8 +197,9 @@
     <div class="popup-content">
       <h3>Upload CV</h3>
       <input type="file" id="cvFile" name="cvFile" accept=".pdf,.doc,.docx" />
-      <button class="btn btn-primary" on:click={() => uploadCV($$('cvFile').files[0])}>
-        Upload
+     <button class="btn btn-primary" on:click="{() => handleClose()}">
+      Close
+        
       </button>
       <button class="btn btn-secondary" on:click={handleClose}>
         Close
