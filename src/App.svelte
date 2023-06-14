@@ -34,6 +34,17 @@
           const uploadButton = document.createElement("button");
           uploadButton.innerText = "Upload CV";
           uploadButton.addEventListener("click", async () => {
+            const popupContainer = document.createElement("div");
+            popupContainer.className = "cv-popup";
+
+            const closeButton = document.createElement("button");
+            closeButton.className = "cv-popup-close";
+            closeButton.innerText = "Close";
+            closeButton.addEventListener("click", () => {
+              document.body.removeChild(popupContainer);
+            });
+            popupContainer.appendChild(closeButton);
+
             const fileInput = document.createElement("input");
             fileInput.type = "file";
             fileInput.accept = ".pdf,.doc,.docx";
@@ -55,9 +66,12 @@
               } else {
                 alert("Failed to upload CV.");
               }
+
+              document.body.removeChild(popupContainer);
             });
 
-            fileInput.click();
+            popupContainer.appendChild(fileInput);
+            document.body.appendChild(popupContainer);
           });
           container.appendChild(uploadButton);
 
@@ -92,6 +106,7 @@
                 popupContainer.className = "cv-popup";
 
                 const closeButton = document.createElement("button");
+                closeButton.className = "cv-popup-close";
                 closeButton.innerText = "Close";
                 closeButton.addEventListener("click", () => {
                   document.body.removeChild(popupContainer);
@@ -255,7 +270,7 @@
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   }
 
- .cv-popup {
+  .cv-popup {
     position: fixed;
     top: 0;
     left: 0;
@@ -265,6 +280,7 @@
     align-items: center;
     justify-content: center;
     z-index: 9999;
+    background-color: rgba(0, 0, 0, 0.5);
   }
 
   .cv-popup-content {
@@ -286,4 +302,3 @@
 </style>
 
 <div id="dataGrid"></div>
-
