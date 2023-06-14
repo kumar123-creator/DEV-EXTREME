@@ -186,9 +186,60 @@
   #dataGrid {
     height: 400px;
   }
-</style>
 
-<h1 style="color: blue;">Job Candidate Details</h1>
+  .popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .popup-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+  }
+
+  .popup-content h3 {
+    color: #333;
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  .popup-content input[type="file"] {
+    margin-bottom: 10px;
+  }
+
+  .btn-primary {
+    background-color: #007bff;
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    background-color: #0069d9;
+  }
+
+  .btn-secondary {
+    background-color: #6c757d;
+    color: #fff;
+  }
+
+  .btn-secondary:hover {
+    background-color: #5a6268;
+  }
+
+  .mr-2 {
+    margin-right: 10px;
+  }
+</style>
 
 <div id="dataGrid"></div>
 
@@ -197,11 +248,7 @@
     <div class="popup-content">
       <h3>Upload CV</h3>
       <input type="file" id="cvFile" name="cvFile" accept=".pdf,.doc,.docx" />
-     <button class="btn btn-primary" on:click="{() => handleClose()}">
-      Close
-        
-      </button>
-      <button class="btn btn-secondary" on:click={handleClose}>
+      <button class="btn btn-primary" on:click={() => handleClose()}>
         Close
       </button>
     </div>
