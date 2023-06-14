@@ -84,7 +84,7 @@
     }));
 
    
-       const columns: [
+       const columns= [
           { dataField: "id", caption: "ID", width: 250 },
           { dataField: "firstName", caption: "First Name", width: 180 },
           { dataField: "surname", caption: "Surname", width: 180 },
