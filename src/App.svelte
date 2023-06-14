@@ -5,67 +5,7 @@
 
   let jsonData = [];
   let gridData = [];
-  let isCVUploadPopupVisible = false;
-  let isViewCvPopupVisible = false;
-  let selectedRowData = null;
-  let selectedCVId = null;
-  let selectedCVFileName = null;
-
-  async function uploadCV(file) {
-    // Perform further actions with the uploaded file
-
-    // Example: Update the backend API URL with the file upload
-    const formData = new FormData();
-    formData.append("file", file);
-
-    if (selectedRowData) {
-      const uploadCandidateId = selectedRowData.id; // Get the candidate ID from selectedRowData
-
-      try {
-        const response = await fetch(
-          `https://api.recruitly.io/api/cloudfile/download?cloudFileId=${selectedCVId}&apiKey=TEST45684CB2A93F41FC40869DC739BD4D126D77`,
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
-
-        if (response.ok) {
-          console.log("CV uploaded successfully");
-          // Perform any additional actions upon successful upload
-        } else {
-          console.error("CV upload failed.");
-          // Handle the error accordingly
-        }
-      } catch (error) {
-        console.error("CV upload error:", error);
-        // Handle the error accordingly
-      }
-    }
-
-    // Close the CV upload popup
-    isCVUploadPopupVisible = false;
-  }
-
-  function handleSave() {
-    // Perform save logic
-    // In this case, we're updating the backend API URL in the handleSave function
-    console.log("Save clicked");
-
-    // Close the CV upload popup
-    isCVUploadPopupVisible = false;
-      isViewCvPopupVisible = false;
-  }
-
-  function handleClose() {
-    // Perform close logic
-    console.log("Close clicked");
-
-    // Close the CV upload popup
-    isCVUploadPopupVisible = false;
-    isViewCvPopupVisible = false;
-  }
-
+  
   const dispatch = createEventDispatcher();
 
   onMount(async () => {
@@ -94,15 +34,6 @@
             caption: "Actions",
             width: 350,
             cellTemplate: function (container, options) {
-              const cvUploadButton = document.createElement("button");
-              cvUploadButton.innerText = "CV Upload";     
-              cvUploadButton.addEventListener("click", function () {
-                const rowData = options.data;
-                selectedRowData = rowData;
-                selectedCVId = rowData.cvId; // Assuming cvId is the property containing the CV file ID
-                isCVUploadPopupVisible = true;
-              });
-            
           const downloadButton = document.createElement("button");
           downloadButton.innerText = "Download CV";
           downloadButton.addEventListener("click", async () => {
