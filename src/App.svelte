@@ -257,20 +257,31 @@
 
  .cv-popup {
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80%;
-    height: 80%;
-    background-color: rgba(0, 0, 0, 0.5);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 9999;
   }
 
-  .cv-popup button {
-    margin: 10px;
+  .cv-popup-content {
+    max-width: 80%;
+    max-height: 80%;
+    background-color: #fff;
+    padding: 20px;
+    overflow: auto;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .cv-popup-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
   }
 </style>
 
