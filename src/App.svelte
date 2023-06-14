@@ -239,26 +239,22 @@
 </script>
 
 <style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+  }
+
+  .btn {
+    margin-top: 10px;
+  }
+
   #dataGrid {
-    height: 400px;
-  }
-
-  .popup-container {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80%;
-    height: 80%;
-    background-color: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    padding: 20px;
-    overflow: auto;
-  }
-
-  .popup-container button {
-    display: block;
-    margin-bottom: 10px;
+    margin-top: 20px;
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   }
 </style>
+
 <div id="dataGrid"></div>
