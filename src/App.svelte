@@ -5,7 +5,66 @@
 
   let jsonData = [];
   let gridData = [];
+  let isCVUploadPopupVisible = false;
+  let isCVViewPopupVisible = false;
+  let selectedRowData = null;
 
+  
+   async function uploadCV(file) {
+	  // Perform further actions with the uploaded file
+  
+	  // Example: Update the backend API URL with the file upload
+	  const formData = new FormData();
+	  formData.append("file", file);
+  
+	  if (selectedRowData) {
+		const uploadCandidateId = selectedRowData.id; // Get the candidate ID from selectedRowData
+  
+		try {
+		  const response = await fetch(
+			`https://api.recruitly.io/api/candidatecv/upload?apiKey=TEST1236C4CF23E6921C41429A6E1D546AC9535E&candidateId=${uploadCandidateId}`,
+			{
+			  method: "POST",
+			  body: formData,
+			}
+		  );
+  
+		  if (response.ok) {
+        alert("file uploaded successfully");
+			console.log("CV uploaded successfully!");
+      console.log(uploadCandidateId);
+			// Perform any additional actions upon successful upload
+		  } else {
+			console.error("CV upload fail.");
+			// Handle the error accordingly
+		  }
+		} catch (error) {
+		  console.error("CV upload error:", error);
+		  // Handle the error accordingly
+		}
+	  }
+  
+	  // Close the CV upload popup
+	  isCVUploadPopupVisible = false;
+	}
+  function handleSave() {
+	  // Perform save logic
+	  // In this case, we're updating the backend API URL in the handleSave function
+	  console.log("Save clicked");
+  
+	  // Close the CV upload popup
+	  isCVUploadPopupVisible = false;
+	}
+  
+	function handleClose() {
+	  // Perform close logic
+	  console.log("Close clicked");
+  
+	  // Close the CV upload popup or CV view popup
+	  isCVUploadPopupVisible = false;
+	  isCVViewPopupVisible = false;
+	}
+	
   onMount(async () => {
     const response = await fetch(
       "https://api.recruitly.io/api/candidate?apiKey=TEST9349C0221517DA4942E39B5DF18C68CDA154"
@@ -31,61 +90,36 @@
         caption: "Actions",
         width: 400,
         cellTemplate: function (container, options) {
-          const uploadButton = document.createElement("button");
-          uploadButton.innerText = "Upload CV";
-          uploadButton.addEventListener("click", async () => {
-            const popupContainer = document.createElement("div");
-            popupContainer.className = "cv-popup";
+        const cvUploadButton = document.createElement("button");
+	cvUploadButton.innerText = "CV Upload";
+	cvUploadButton.classList.add("btn", "btn-success", "mr-2");
+	cvUploadButton.style.marginRight = "10px";
+	cvUploadButton.addEventListener("click", async function () {
+        const rowData = options.data;
+      	selectedRowData = rowData;
+        isCVUploadPopupVisible = true;
+  });
+  container.appendChild(cvUploadButton);
 
-            const closeButton = document.createElement("button");
-            closeButton.className = "cv-popup-close";
-            closeButton.innerText = "Close";
-            closeButton.addEventListener("click", () => {
-              document.body.removeChild(popupContainer);
-            });
-            popupContainer.appendChild(closeButton);
-
-            const fileInput = document.createElement("input");
-            fileInput.type = "file";
-            fileInput.accept = ".pdf,.doc,.docx";
-            fileInput.addEventListener("change", async (event) => {
-              const file = event.target.files[0];
-              const formData = new FormData();
-              formData.append("file", file);
-
-              const uploadResponse = await fetch(
-                `https://api.recruitly.io/api/candidatecv/upload?apiKey=TEST1236C4CF23E6921C41429A6E1D546AC9535E&candidateId=${options.data.id}`,
-                {
-                  method: "POST",
-                  body: formData,
-                }
-              );
-
-              if (uploadResponse.ok) {
-                alert("CV uploaded successfully.");
-              } else {
-                alert("Failed to upload CV.");
-              }
-
-              document.body.removeChild(popupContainer);
-            });
-
-            popupContainer.appendChild(fileInput);
-            document.body.appendChild(popupContainer);
-          });
-          container.appendChild(uploadButton);
 
           const downloadButton = document.createElement("button");
+          downloadButton.classList.add("btn", "btn-success", "mr-2");
           downloadButton.innerText = "Download CV";
+	        downloadButton.style.marginRight = "10px";
           downloadButton.addEventListener("click", async () => {
             const cvResponse = await fetch(
               `https://api.recruitly.io/api/candidatecv/${options.data.id}?apiKey=TEST27306FA00E70A0F94569923CD689CA9BE6CA`
             );
             if (cvResponse.ok) {
               const cvData = await cvResponse.json();
+              console.log(cvData);
               const cvId = cvData.internal.cloudFile.id;
+              console.log(cvData.internal.cloudFile);
+              console.log(cvId);
+
               const downloadLink = `https://api.recruitly.io/api/cloudfile/download?cloudFileId=${cvId}&apiKey=TEST45684CB2A93F41FC40869DC739BD4D126D77`;
               window.open(downloadLink);
+              alert("file downloaded successfully");
             } else {
               alert("Failed to fetch CV file.");
             }
@@ -93,38 +127,30 @@
           container.appendChild(downloadButton);
 
           const viewButton = document.createElement("button");
+          viewButton.classList.add("btn", "btn-primary", "mr-2");
           viewButton.innerText = "View CV";
+	        viewButton.style.marginRight = "10px";
           viewButton.addEventListener("click", async () => {
-            const cvResponse = await fetch(
-              `https://api.recruitly.io/api/candidatecv/${options.data.id}?apiKey=TEST27306FA00E70A0F94569923CD689CA9BE6CA`
-            );
-            if (cvResponse.ok) {
-              const cvData = await cvResponse.json();
-              const cvHtml = cvData.html;
-              if (cvHtml) {
-                const popupContainer = document.createElement("div");
-                popupContainer.className = "cv-popup";
+           const cvResponse = await fetch(
+                                          `https://api.recruitly.io/api/candidatecv/${options.data.id}?apiKey=TEST27306FA00E70A0F94569923CD689CA9BE6CA`
+                                           );
+          if (cvResponse.ok) {
+         const cvData = await cvResponse.json();
+         const cvHtml = cvData.html;
+           if (cvHtml) {
+      const windowFeatures = "height=500,width=700"; // Set the desired height and width values
+      const cvWindow = window.open("", "_blank", windowFeatures);
+      
+      cvWindow.document.write(cvHtml);
+      cvWindow.document.close();
+    } else {
+      alert("CV file not found.");
+    }
+  } else {
+    alert("Failed to fetch CV.");
+  }
+});
 
-                const closeButton = document.createElement("button");
-                closeButton.className = "cv-popup-close";
-                closeButton.innerText = "Close";
-                closeButton.addEventListener("click", () => {
-                  document.body.removeChild(popupContainer);
-                });
-                popupContainer.appendChild(closeButton);
-
-                const cvContent = document.createElement("div");
-                cvContent.innerHTML = cvHtml;
-                popupContainer.appendChild(cvContent);
-
-                document.body.appendChild(popupContainer);
-              } else {
-                alert("CV file not found.");
-              }
-            } else {
-              alert("Failed to fetch CV file.");
-            }
-          });
           container.appendChild(viewButton);
         },
         width: 400,
@@ -299,6 +325,32 @@
     right: 10px;
     cursor: pointer;
   }
+  
+  .action-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+
+  .action-buttons button {
+    margin-right: 10px;
+  }
+
 </style>
 
 <div id="dataGrid"></div>
+
+{#if isCVUploadPopupVisible}
+<div class="cv-popup">
+  <div class="cv-popup-content">
+  <h3>Upload CV</h3>
+  <input
+    type="file"
+    on:change="{(event) => uploadCV(event.target.files[0])}"
+    accept=".pdf,.doc,.docx"
+  />
+  <button on:click={handleSave} class="btn btn-primary">Save</button>
+  <button on:click={handleClose} class="btn btn-secondary">Close</button>
+  </div>
+</div>
+{/if}
